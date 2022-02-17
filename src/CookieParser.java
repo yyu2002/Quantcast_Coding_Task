@@ -1,8 +1,9 @@
 import java.io.*;
 import java.util.HashMap;
 
+// cookie parser class that parses a CSV file with cookies and
+// their timestamps, and returns the most active cookie(s)
 public class CookieParser {
-
     // name of CSV file to parse for cookies
     String filename;
 
@@ -15,15 +16,23 @@ public class CookieParser {
     }
 
     // parse command line arguments and store them into class fields
-    private void parseArgs(String[] args) {
+    public void parseArgs(String[] args) {
+        // if arguments are invalid
+        if (args.length != 3 || !args[1].equals("-d")) {
+            System.out.println("Invalid arguments!"); // exit with error
+            this.filename = "";
+            this.date = "";
+            return;
+        }
+
         // store filename of CSV file and date into class fields
         this.filename = args[0];
         this.date = args[2];
     }
 
-    // parses the CSV file and prints the most active cookies on
-    // the date stored in the class field
-    private void displayMostActiveCookies() {
+    // parses the CSV file and returns string of the most active cookies on
+    // the date stored in the class field, returns each cookie on a separate line
+    public String getMostActiveCookies() {
         // Map that stores the frequency of each cookie on the current day
         HashMap<String, Integer> cookieFrequency = new HashMap<>();
 
@@ -56,32 +65,33 @@ public class CookieParser {
             int frequencyOfMostActiveCookie = getFrequencyOfMostActiveCookie(cookieFrequency);
 
             // get the most active cookies and display them each on a new line
-            printMostActiveCookies(cookieFrequency, frequencyOfMostActiveCookie);
+            return getMostActiveCookies(cookieFrequency, frequencyOfMostActiveCookie);
         } catch (FileNotFoundException e) {
             // e.printStackTrace();
             System.out.printf("File %s not found!\n", filename);
-        } catch (IOException e){
+        } catch (IOException e) {
             // e.printStackTrace();
         }
-
+        return "";
     }
 
-    private void printMostActiveCookies(HashMap<String, Integer> cookieFrequency, int frequencyOfMostActiveCookie) {
+    public String getMostActiveCookies(HashMap<String, Integer> cookieFrequency, int frequencyOfMostActiveCookie) {
         // make one pass through map, and if the frequency of the current cookie is equal to the
-        // frequency of the most active cookies, print them on a new line
+        // frequency of the most active cookies, append them on a new line
+        StringBuilder sb = new StringBuilder();
         for (String cookie : cookieFrequency.keySet()) {
             int frequency = cookieFrequency.get(cookie);
             if (frequency == frequencyOfMostActiveCookie) {
-                System.out.println(cookie);
+                sb.append(cookie + "\n");
             }
         }
 
-        // print a new line for formatting
-        // System.out.println();
+        // return most active cookies with extra whitespace trimmed off
+        return sb.toString().trim();
     }
 
     // returns the frequency of the most active cookie(s)
-    private int getFrequencyOfMostActiveCookie(HashMap<String, Integer> cookieFrequency) {
+    public int getFrequencyOfMostActiveCookie(HashMap<String, Integer> cookieFrequency) {
         int highestFrequency = 0;
 
         // make one pass through cookieFrequency map to find the highest frequency
@@ -96,7 +106,7 @@ public class CookieParser {
     }
 
     // Extracts the date from a timestamp
-    private String extractDateFromTimeStamp(String timestamp) {
+    public String extractDateFromTimeStamp(String timestamp) {
         // start index is 1 index after the first comma
         int startIndex = timestamp.indexOf(",") + 1;
 
@@ -108,17 +118,14 @@ public class CookieParser {
         return date;
     }
 
-    // Main method that creates a cookie parser object with the command line arguments,
-    // then displays the most active cookies
-    public static void main(String[] args) {
-        // check if we have all 3 arguments (csv file, -d flag, date)
-        // check if the 2nd argument is "-d"
-        if (args.length != 3 || !args[1].equals("-d")) {
-            System.exit(1); // exit with error
-        }
-
-        // create CookieParser object to parse the cookie
-        CookieParser cookieParser = new CookieParser(args);
-        cookieParser.displayMostActiveCookies();
+    // returns filename
+    public String getFilename() {
+        return filename;
     }
+
+    // returns getDate
+    public String getDate() {
+        return date;
+    }
+
 }
