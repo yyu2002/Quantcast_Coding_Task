@@ -95,8 +95,8 @@ public class CookieParserTester {
             printExpAct("AtY0laUfhglK3lC7", output);
         }
 
-        // test 2.1
-        System.out.println("\n***** Begin Test 2.1 - 2018-12-08 *****");
+        // test 2.2
+        System.out.println("\n***** Begin Test 2.2 - 2018-12-08 *****");
         totalTests++;
         arguments = new String[]{"cookie_log.csv", "-d", "2018-12-08"};
         cookieParser = new CookieParser(arguments);
@@ -115,7 +115,7 @@ public class CookieParserTester {
         }
 
         // test 2.3
-        System.out.println("\n***** Begin Test 2.1 - Date that doesn't exist *****");
+        System.out.println("\n***** Begin Test 2.3 - Date that doesn't exist *****");
         totalTests++;
         arguments = new String[]{"cookie_log.csv", "-d", "2018-01-05"};
         cookieParser = new CookieParser(arguments);
